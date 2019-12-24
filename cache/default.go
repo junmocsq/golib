@@ -5,7 +5,7 @@ import red "github.com/gomodule/redigo/redis"
 var redisPool map[string]*red.Pool = make(map[string]*red.Pool)
 
 func init() {
-	// 注册redis default模块
+	// 注册redis default模块 必须注册
 	//RegisterRedisPool("default","127.0.0.1","6379","")
 
 	// 注册redis sql模块
@@ -17,6 +17,14 @@ func RegisterRedisPool(module, host, port, auth string) {
 	if _, ok := redisPool[module]; !ok {
 		redisPool[module] = initRedis(module, host, port, auth)
 	}
+}
+
+func Exec(cmd string, module string, key string, args ...interface{}) (interface{}, error) {
+	return exec(cmd, module, key, args...)
+}
+
+func Client(module string) (red.Conn, error) {
+	return getClient(module)
 }
 
 func ExecDefault(cmd string, key string, args ...interface{}) (interface{}, error) {
