@@ -6,16 +6,16 @@ var redisPool map[string]*red.Pool = make(map[string]*red.Pool)
 
 func init() {
 	// 注册redis default模块
-	registerRedisPool("default")
+	//RegisterRedisPool("default","127.0.0.1","6379","")
 
 	// 注册redis sql模块
 	//registerRedisPool("sql")
 }
 
-func registerRedisPool(module string) {
+func RegisterRedisPool(module, host, port, auth string) {
 	// 只注册一次
 	if _, ok := redisPool[module]; !ok {
-		redisPool[module] = initRedis(module)
+		redisPool[module] = initRedis(module, host, port, auth)
 	}
 }
 

@@ -2,7 +2,6 @@ package cache
 
 import (
 	"fmt"
-	"github.com/astaxie/beego"
 	red "github.com/gomodule/redigo/redis"
 	"time"
 )
@@ -20,19 +19,18 @@ type GRPool struct {
 //redis.default.host = 127.0.0.1
 //redis.default.port = 6382
 //redis.default.auth =
-func getConfig(module string) config {
+func getConfig(module, host, port, auth string) config {
 	conf := config{
-		host: beego.AppConfig.DefaultString("redis."+module+".host", "127.0.0.1"),
-		port: beego.AppConfig.DefaultString("redis."+module+".port", "6379"),
-		auth: beego.AppConfig.DefaultString("redis." + module + ".auth",""),
-
+		host: host,
+		port: port,
+		auth: auth,
 	}
 	return conf
 }
 
-func initRedis(module string) *red.Pool {
+func initRedis(module, host, port, auth string) *red.Pool {
 	fmt.Println("init redis ", module, "pool")
-	conf := getConfig(module)
+	conf := getConfig(module, host, port, auth)
 	pool := &red.Pool{
 		MaxIdle:     256,  // 最大的空闲连接数，表示即使没有redis连接时依然可以保持N个空闲的连接，而不被清除，随时处于待命状态。
 		MaxActive:   1000, // 最大的连接数，表示同时最多有N个连接。0表示不限制。
