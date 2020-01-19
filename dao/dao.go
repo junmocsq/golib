@@ -198,11 +198,9 @@ func (d *dao) fetchAll(model ...interface{}) bool {
 			return false
 		}
 	}
-	n, err := d.o.Raw(d.sql, d.params...).QueryRows(model...)
-	if err != nil || n == 0 {
-		if err != nil {
-			logs.GetLogger("dao").Printf("fetchAll::sql:%s err:%v", d.sql, err)
-		}
+	_, err := d.o.Raw(d.sql, d.params...).QueryRows(model...)
+	if err != nil {
+		logs.GetLogger("dao").Printf("fetchAll::sql:%s err:%v", d.sql, err)
 		return false
 	} else {
 		d.setResult(model)
