@@ -337,7 +337,19 @@ func (d *dao) commit() error {
 	return d.o.Commit()
 }
 
+// dao.NewDao().SetTag(tag).ClearTag()
+// 清除tag
 func (d *dao) ClearTag() {
+	// 外部调用，需要dao还原
+	defer d.clear()
+	d.clearTag()
+}
+
+// dao.NewDao().SetTag(tag).SetKey(key).ClearKey()
+// 清除key
+func (d *dao) ClearKey() {
+	// 外部调用，需要dao还原
+	defer d.clear()
 	d.clearTag()
 }
 
