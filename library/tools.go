@@ -1,8 +1,10 @@
 package library
 
 import (
+	"bytes"
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -68,6 +70,25 @@ func HttpGet(url string) ([]byte, error) {
 		return nil, err
 	}
 
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		// handle error
+		return nil, err
+	}
+	return body, nil
+}
+
+func HttpPost(url string, params map[string]string) ([]byte, error) {
+	b, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(b))
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
