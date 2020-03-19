@@ -32,9 +32,9 @@ func initRedis(module, host, port, auth string) *red.Pool {
 	fmt.Println("init redis ", module, "pool")
 	conf := getConfig(module, host, port, auth)
 	pool := &red.Pool{
-		MaxIdle:     256,  // 最大的空闲连接数，表示即使没有redis连接时依然可以保持N个空闲的连接，而不被清除，随时处于待命状态。
-		MaxActive:   1000, // 最大的连接数，表示同时最多有N个连接。0表示不限制。
-		IdleTimeout: time.Duration(120),
+		MaxIdle:     256,               // 最大的空闲连接数，表示即使没有redis连接时依然可以保持N个空闲的连接，而不被清除，随时处于待命状态。
+		MaxActive:   2000,              // 最大的连接数，表示同时最多有N个连接。0表示不限制。
+		IdleTimeout: 240 * time.Second, // 当连接空闲超过这个时间就回收
 		Wait:        true,
 		Dial: func() (red.Conn, error) {
 			return red.Dial(
