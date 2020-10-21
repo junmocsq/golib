@@ -64,5 +64,8 @@ func RegisterPrefixKey(prefix string) {
 
 // 获取redis key
 func GetKey(key string) string {
+	if prefixKey == "" {
+		return key
+	}
 	return prefixKey + "_" + key
 }
